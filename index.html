@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitQuest: Interactive Product Requirements</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral with Vibrant Accents -->
+    <!-- Application Structure Plan: A single-page application with a fixed sidebar navigation. This structure was chosen to break down the dense product requirements document into logical, thematic sections that are easily accessible. Users can jump to any category (e.g., UI/UX, Gamification) without scrolling, making the information highly scannable and digestible. This non-linear approach enhances usability by allowing users to explore the requirements based on their interests, rather than being forced through a linear document. -->
+    <!-- Visualization & Content Choices: The application uses cards, icons, and two charts to visually represent key concepts from the report. 1) Core Features: A bar chart visualizes the variety of supported activity types (Goal: Organize) to provide a quick overview before the detailed text. 2) Gamification: A doughnut chart breaks down the motivational strategies (Goal: Inform/Organize) into its core components. These visualizations serve to break up text, increase engagement, and make the abstract concepts more concrete. All other information is presented in structured cards and lists for clarity. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #3d3d3d;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link.active {
+            background-color: #ff8c42;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .nav-link:not(.active):hover {
+            background-color: #eaddd7;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff8c42;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-[#f0e6e0] p-4 md:p-6 flex-shrink-0">
+            <h1 class="text-2xl font-bold text-[#ff8c42] mb-8">FitQuest PRD</h1>
+            <nav class="space-y-2">
+                <a href="#" id="nav-ui" class="nav-link block py-2.5 px-4 rounded-lg text-gray-700 font-medium active">UI & UX</a>
+                <a href="#" id="nav-features" class="nav-link block py-2.5 px-4 rounded-lg text-gray-700 font-medium">Core Features</a>
+                <a href="#" id="nav-gamification" class="nav-link block py-2.5 px-4 rounded-lg text-gray-700 font-medium">Gamification</a>
+                <a href="#" id="nav-ai" class="nav-link block py-2.5 px-4 rounded-lg text-gray-700 font-medium">✨ AI Features</a>
+                <a href="#" id="nav-integration" class="nav-link block py-2.5 px-4 rounded-lg text-gray-700 font-medium">Integration & Security</a>
+                <a href="#" id="nav-platform" class="nav-link block py-2.5 px-4 rounded-lg text-gray-700 font-medium">Platform & Performance</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            
+            <!-- UI & UX Section -->
+            <section id="content-ui" class="content-section active">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">User Interface & Experience</h2>
+                <p class="text-gray-600 mb-8 max-w-3xl">This section outlines the design philosophy and user experience goals for FitQuest. The aim is to create an app that is not only functional but also delightful and motivating to use, ensuring users feel supported on their fitness journey.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2 text-[#ff8c42]">Clean & Vibrant</h3>
+                        <p class="text-gray-600 text-sm">A modern, uncluttered UI with an energetic color palette to evoke positivity and motivation.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2 text-[#ff8c42]">Intuitive Navigation</h3>
+                        <p class="text-gray-600 text-sm">A persistent bottom navigation bar for one-tap access to all major app sections.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2 text-[#ff8c42]">Engaging Visuals</h3>
+                        <p class="text-gray-600 text-sm">Data presented in appealing charts and infographics, avoiding dense tables of numbers.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2 text-[#ff8c42]">Delightful Interactions</h3>
+                        <p class="text-gray-600 text-sm">Subtle animations and haptic feedback to make the app feel responsive and engaging.</p>
+                    </div>
+                </div>
+
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Onboarding</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Quick, skippable tour of key features.</li>
+                            <li>Guided setup to connect wearables and set first goal.</li>
+                            <li>Invitation to a beginner-friendly challenge.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Accessibility</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Adherence to WCAG 2.1 AA standards.</li>
+                            <li>High-contrast mode and dynamic font sizes.</li>
+                            <li>Full screen reader compatibility for iOS and Android.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Core Features Section -->
+            <section id="content-features" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">Core Features: Activity & Metric Tracking</h2>
+                <p class="text-gray-600 mb-8 max-w-3xl">FitQuest's core functionality revolves around comprehensive and accurate activity tracking. This section details the supported activities, the metrics we'll track, and the in-app experience during a workout.</p>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+                    <h3 class="font-semibold text-lg mb-4 text-center">Supported Activity Categories</h3>
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Tracking & Metrics</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>GPS tracking for outdoor routes, distance, and pace.</li>
+                            <li>Sensor-based data for steps, heart rate, and calories.</li>
+                            <li>Detailed logging for strength training (sets, reps, weight).</li>
+                            <li>Manual entry for any missed activities.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Live Activity View</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Large, easy-to-read display of key metrics.</li>
+                            <li>Simple controls to pause, resume, and finish.</li>
+                            <li>Audio cues for distance milestones.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Data Analytics & Insights</h3>
+                         <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>At-a-glance dashboard with daily/weekly summaries.</li>
+                            <li>Progress reports highlighting trends and personal bests.</li>
+                            <li>Personalized insights based on user data analysis.</li>
+                             <li>✨ Enhanced with generative AI for deeper insights.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gamification Section -->
+            <section id="content-gamification" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">Gamification & Motivation</h2>
+                <p class="text-gray-600 mb-8 max-w-3xl">To keep users engaged and motivated, FitQuest will incorporate several gamification elements. The goal is to make fitness fun and rewarding, encouraging long-term consistency through positive reinforcement.</p>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+                    <h3 class="font-semibold text-lg mb-4 text-center">Pillars of Motivation</h3>
+                     <div class="chart-container">
+                        <canvas id="gamificationChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Rewards System</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Earn XP to level up with every workout.</li>
+                            <li>Unlock visually appealing badges for milestones.</li>
+                            <li>Track activity streaks to build consistency.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Challenges</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Set personal goals to work towards.</li>
+                            <li>Invite friends to private group competitions.</li>
+                            <li>Participate in large, themed community events.</li>
+                            <li>✨ Create your own challenges with generative AI.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Leaderboards</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Weekly rankings for steps, distance, and time.</li>
+                            <li>Filterable views for Friends, Country, and Global.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- AI Features Section -->
+            <section id="content-ai" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">✨ AI Features powered by Gemini</h2>
+                <p class="text-gray-600 mb-8 max-w-3xl">To provide a truly personalized and dynamic experience, FitQuest will leverage the Gemini API. These features transform user data into motivational coaching and create limitless, fun ways to stay active.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-xl mb-3 text-[#ff8c42]">Personalized AI Insights</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Go beyond basic stats. The Gemini API will analyze workout history, spot trends, and provide narrative, motivational feedback that feels like a personal coach.</p>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-gray-800 mb-2">Example Insight:</p>
+                            <p class="text-gray-600 text-sm italic">"Great job on your consistency this week, Alex! I noticed your average cycling speed has increased by 5% over the last month. It looks like those weekend long rides are really building your endurance. Keep it up!"</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-xl mb-3 text-[#ff8c42]">Dynamic Challenge Generator</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Never get bored again. Users can describe a themed challenge, and the Gemini API will generate a custom plan with unique goals, turning fitness into an adventure.</p>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <p class="text-sm font-medium text-gray-800 mb-2">User Prompt Example:</p>
+                            <input id="challenge-prompt-input" type="text" value="A 1-week 'Climb Mount Everest' challenge using stairs" class="w-full p-2 rounded border border-gray-300 text-sm">
+                            <button id="generate-challenge-btn" class="w-full bg-[#ff8c42] text-white font-bold py-2 px-4 rounded-lg mt-2 hover:bg-opacity-90 transition-colors">✨ Generate Challenge</button>
+                            <div id="challenge-output" class="mt-4 text-sm"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Integration & Security Section -->
+            <section id="content-integration" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">Integration & Security</h2>
+                <p class="text-gray-600 mb-8 max-w-3xl">Seamless data synchronization and robust security are foundational to user trust. This section covers how FitQuest will connect with other platforms and how we will protect user data and privacy.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Data Synchronization</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Sync workout data, heart rate, and more with major health platforms.</p>
+                        <div class="flex space-x-4">
+                            <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full">Apple Health</span>
+                            <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full">Google Fit</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Wearable Integration</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Directly connect and automatically sync with popular fitness trackers.</p>
+                        <div class="flex flex-wrap gap-2">
+                             <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full">Apple Watch</span>
+                             <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full">Garmin</span>
+                             <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full">Fitbit</span>
+                             <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2.5 py-1 rounded-full">WHOOP</span>
+                        </div>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Data Protection & Security</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>End-to-end encryption (TLS 1.2+ in transit, AES-256 at rest).</li>
+                            <li>Compliance with GDPR, CCPA, and HIPAA-ready standards.</li>
+                            <li>Secure authentication via OAuth 2.0 with social sign-on.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Privacy Controls</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Granular profile privacy settings (Public, Friends, Private).</li>
+                            <li>Clear and accessible data sharing preferences.</li>
+                            <li>Easy options to hide or obscure workout map location data.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Platform & Performance Section -->
+            <section id="content-platform" class="content-section">
+                <h2 class="text-3xl font-bold mb-4 text-gray-800">Platform & Performance</h2>
+                <p class="text-gray-600 mb-8 max-w-3xl">FitQuest will be a high-performing, native application available on both iOS and Android. This section details compatibility requirements, backend architecture, and key performance benchmarks.</p>
+                
+                <h3 class="font-semibold text-lg mb-4 text-center">Key Performance Benchmarks</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 text-center">
+                        <p class="text-3xl font-bold text-[#ff8c42]">&lt; 2s</p>
+                        <p class="text-gray-600 mt-1">App Launch Time</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 text-center">
+                        <p class="text-3xl font-bold text-[#ff8c42]">60fps</p>
+                        <p class="text-gray-600 mt-1">UI Responsiveness</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 text-center">
+                        <p class="text-3xl font-bold text-[#ff8c42]">&lt; 500ms</p>
+                        <p class="text-gray-600 mt-1">API Response (p95)</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Platform Compatibility</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Native development for iOS and Android for best performance.</li>
+                            <li>iOS: Support for the latest major version and one prior.</li>
+                            <li>Android: Support for the latest three major versions.</li>
+                            <li>Adherence to platform-specific design guidelines.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="font-semibold text-lg mb-2">Scalable Architecture</h3>
+                        <ul class="list-disc list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Backend built on a serverless cloud infrastructure.</li>
+                            <li>Scalable database to handle user growth.</li>
+                            <li>Well-documented RESTful or GraphQL API.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            const navigateTo = (id) => {
+                navLinks.forEach(link => link.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+
+                const targetLink = document.querySelector(`#nav-${id}`);
+                const targetSection = document.querySelector(`#content-${id}`);
+
+                if (targetLink) targetLink.classList.add('active');
+                if (targetSection) targetSection.classList.add('active');
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = link.id.split('-')[1];
+                    navigateTo(id);
+                });
+            });
+
+            // AI Challenge Generator Logic
+            const generateBtn = document.getElementById('generate-challenge-btn');
+            const promptInput = document.getElementById('challenge-prompt-input');
+            const challengeOutput = document.getElementById('challenge-output');
+
+            if (generateBtn) {
+                generateBtn.addEventListener('click', () => {
+                    const userPrompt = promptInput.value;
+                    if (!userPrompt) return;
+
+                    challengeOutput.innerHTML = '<div class="loader"></div>';
+                    generateBtn.disabled = true;
+
+                    // Simulate API call to Gemini
+                    setTimeout(() => {
+                        const generatedChallenge = `
+                            <p class="font-semibold text-gray-800 mb-2">Your AI-Generated Challenge:</p>
+                            <div class="border-l-4 border-[#ff8c42] pl-4 text-gray-700">
+                                <h4 class="font-bold">🏔️ The Everest Stair Climb!</h4>
+                                <p class="mb-2">Goal: Climb 29,029 feet (the height of Everest) in 7 days by climbing stairs.</p>
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li><strong>Day 1:</strong> Base Camp (1,000 ft)</li>
+                                    <li><strong>Day 2:</strong> The Ascent Begins (3,000 ft)</li>
+                                    <li><strong>Day 3:</strong> Khumbu Icefall (4,500 ft)</li>
+                                    <li><strong>Day 4:</strong> Valley of Silence (5,000 ft)</li>
+                                    <li><strong>Day 5:</strong> The Lhotse Face (6,000 ft)</li>
+                                    <li><strong>Day 6:</strong> The Death Zone (6,529 ft)</li>
+                                    <li><strong>Day 7:</strong> Summit Push! (3,000 ft)</li>
+                                </ul>
+                            </div>
+                        `;
+                        challengeOutput.innerHTML = generatedChallenge;
+                        generateBtn.disabled = false;
+                    }, 1500);
+                });
+            }
+
+
+            // Initial state
+            navigateTo('ui');
+
+            // Chart.js Implementations
+            const chartColors = {
+                primary: 'rgba(255, 140, 66, 0.8)',
+                primaryHover: 'rgba(255, 140, 66, 1)',
+                secondary: 'rgba(240, 230, 224, 0.8)',
+                accent1: 'rgba(255, 204, 170, 0.8)',
+                accent2: 'rgba(61, 61, 61, 0.7)',
+            };
+            
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = '#3d3d3d';
+
+            // Activity Chart (Bar)
+            const activityCtx = document.getElementById('activityChart');
+            if (activityCtx) {
+                new Chart(activityCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Cardio', 'Strength', 'Classes & Sports'],
+                        datasets: [{
+                            label: 'Number of Example Activities',
+                            data: [6, 2, 5],
+                            backgroundColor: [chartColors.primary, chartColors.accent1, chartColors.secondary],
+                            borderColor: [chartColors.primaryHover, chartColors.primary, chartColors.accent2],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: '#3d3d3d',
+                                titleFont: { weight: 'bold' },
+                                bodyFont: { size: 12 },
+                                displayColors: false,
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: '#eaddd7'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gamification Chart (Doughnut)
+            const gamificationCtx = document.getElementById('gamificationChart');
+            if (gamificationCtx) {
+                new Chart(gamificationCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Rewards System', 'Challenges', 'Leaderboards'],
+                        datasets: [{
+                            label: 'Motivation Components',
+                            data: [3, 3, 2],
+                            backgroundColor: [chartColors.primary, chartColors.accent1, chartColors.accent2],
+                            hoverBackgroundColor: [chartColors.primaryHover, '#ff8c42', '#3d3d3d'],
+                            borderColor: '#f8f7f4',
+                            borderWidth: 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    boxWidth: 12,
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#3d3d3d',
+                                titleFont: { weight: 'bold' },
+                                bodyFont: { size: 12 },
+                                displayColors: true,
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
